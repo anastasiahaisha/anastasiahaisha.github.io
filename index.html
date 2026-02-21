@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Anastasiia Haisha — CV</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Mono:wght@400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --bg: #f5f0e8;
+      --ink: #1a1714;
+      --accent: #c0392b;
+      --muted: #7a7068;
+      --line: #d4cdc2;
+      --card: #edeae2;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.6;
+    }
+
+    .page {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 60px 32px 80px;
+    }
+
+    /* HEADER */
+    header {
+      display: flex;
+      gap: 32px;
+      align-items: flex-start;
+      margin-bottom: 56px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--line);
+      animation: fadeUp 0.7s ease both;
+    }
+
+    .avatar {
+      width: 150px;
+      height: 150px;
+      border-radius: 60%;
+      object-fit: cover;
+      border: 2px solid var(--line);
+      flex-shrink: 0;
+      margin-top: 6px;
+    }
+
+    .header-text {}
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+      margin-bottom: 14px;
+    }
+
+    h1 em { font-style: italic; color: var(--accent); }
+
+    .tagline {
+      font-size: 0.95rem;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .contacts {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 20px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    .contacts a { color: var(--muted); text-decoration: none; }
+    .contacts a:hover { color: var(--accent); }
+
+    /* SECTIONS */
+    section {
+      margin-bottom: 52px;
+      animation: fadeUp 0.7s ease both;
+    }
+    section:nth-child(2) { animation-delay: 0.1s; }
+    section:nth-child(3) { animation-delay: 0.2s; }
+    section:nth-child(4) { animation-delay: 0.3s; }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.66rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    /* EDUCATION */
+    .edu-block {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .edu-block:first-of-type { padding-top: 0; }
+    .edu-block:last-of-type { border-bottom: none; }
+
+    .edu-degree {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 3px;
+    }
+
+    .edu-meta {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--muted);
+    }
+
+    /* SKILLS */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 14px;
+    }
+
+    .skill-group {
+      background: var(--card);
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: 2px;
+    }
+
+    .skill-group-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .skill-list {
+      list-style: none;
+      font-size: 0.84rem;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.67rem;
+      color: var(--muted);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 540px) {
+      header { flex-direction: column; }
+      .avatar { width: 80px; height: 80px; }
+      .page { padding: 36px 20px 60px; }
+      .skills-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <header>
+    <!-- ✅ Фото тут — в body, всередині header -->
+    <img src="photo1.jpg" alt="Anastasiia Haisha" class="avatar"/>
+
+    <div class="header-text">
+      <p class="eyebrow">Curriculum Vitae</p>
+      <h1>Anastasiia <em>Haisha</em></h1>
+      <p class="tagline">Software Engineering student passionate about building meaningful software.</p>
+      <div class="contacts">
+        <a href="mailto:anastasia.haisha@gmail.com">anastasia.haisha@gmail.com</a>
+        <span>Lviv, Ukraine</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- EDUCATION -->
+  <section>
+    <p class="section-label">Education</p>
+    <div class="edu-block">
+      <p class="edu-degree">B.Sc. Software Engineering</p>
+      <p class="edu-meta">Ivan Franko National University of Lviv · 2025 — Present · Lviv, Ukraine</p>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section>
+    <p class="section-label">Skills</p>
+    <div class="skills-grid">
+      <div class="skill-group">
+        <p class="skill-group-name">Programming</p>
+        <ul class="skill-list">
+          <li>Python</li>
+          <li>JavaScript</li>
+          <li>C / C++</li>
+          <li>HTML & CSS</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-name">Tools</p>
+        <ul class="skill-list">
+          <li>Git & GitHub</li>
+          <li>VS Code</li>
+          <li>Linux basics</li>
+        </ul>
+      </div>
+      <div class="skill-group">
+        <p class="skill-group-name">Languages</p>
+        <ul class="skill-list">
+          <li>Ukrainian — Native</li>
+          <li>English — B2</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>Updated February 2026</span>
+    <span><a href="mailto:anastasia.haisha@gmail.com">get in touch</a></span>
+  </footer>
+
+</div>
+</body>
+</html>
