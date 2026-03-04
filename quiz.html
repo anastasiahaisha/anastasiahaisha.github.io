@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Вікторина для Тохи 😼</title>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;700;900&family=Nunito:wght@400;600;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --pink: #ff3e7f;
+    --pink2: #ff85a1;
+    --yellow: #ffe600;
+    --dark: #1a0a0f;
+    --card: #2a0f1a;
+    --green: #00e676;
+    --red: #ff1744;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Фонові серця */
+  .bg-hearts {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .bh {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0.07;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    from { transform: translateY(110vh) rotate(0deg); opacity: 0.07; }
+    to   { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* Головний контейнер */
+  #app {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 540px;
+    padding: 20px;
+  }
+
+  /* ======= ЕКРАН СТАРТУ ======= */
+  #screen-start {
+    text-align: center;
+    animation: popIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  @keyframes popIn {
+    from { transform: scale(0.5); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+
+  .cat-emoji {
+    font-size: 6rem;
+    display: block;
+    animation: bounce 1.2s infinite ease-in-out;
+    filter: drop-shadow(0 0 20px var(--pink));
+  }
+
+  @keyframes bounce {
+    0%,100% { transform: translateY(0) rotate(-5deg); }
+    50%      { transform: translateY(-18px) rotate(5deg); }
+  }
+
+  .title-main {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.9rem;
+    font-weight: 900;
+    color: white;
+    line-height: 1.2;
+    margin: 18px 0 8px;
+  }
+
+  .title-main span {
+    color: var(--pink);
+    text-shadow: 0 0 20px var(--pink);
+  }
+
+  .subtitle {
+    color: rgba(255,255,255,0.6);
+    font-size: 1rem;
+    margin-bottom: 28px;
+    line-height: 1.5;
+  }
+
+  .meme-box {
+    background: var(--card);
+    border: 2px solid var(--pink);
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin: 0 auto 28px;
+    font-size: 0.95rem;
+    color: var(--yellow);
+    font-weight: 600;
+    box-shadow: 0 0 20px rgba(255,62,127,0.3);
+  }
+
+  .btn-start {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--pink), #c0006a);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 16px 48px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 4px 25px rgba(255,62,127,0.5);
+    letter-spacing: 0.5px;
+  }
+
+  .btn-start:hover {
+    transform: scale(1.07) rotate(-1deg);
+    box-shadow: 0 8px 35px rgba(255,62,127,0.8);
+  }
+
+  /* ======= ЕКРАН ПИТАННЯ ======= */
+  #screen-quiz { display: none; }
+
+  .progress-bar-wrap {
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    height: 8px;
+    margin-bottom: 22px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--yellow));
+    border-radius: 50px;
+    transition: width 0.5s ease;
+  }
+
+  .q-counter {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.4);
+    text-align: right;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+  }
+
+  .question-card {
+    background: var(--card);
+    border: 2px solid rgba(255,62,127,0.4);
+    border-radius: 20px;
+    padding: 28px 24px 22px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    animation: slideIn 0.4s cubic-bezier(0.34,1.3,0.64,1);
+  }
+
+  @keyframes slideIn {
+    from { transform: translateX(60px); opacity: 0; }
+    to   { transform: translateX(0); opacity: 1; }
+  }
+
+  .q-emoji {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 10px;
+  }
+
+  .q-text {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: white;
+    line-height: 1.4;
+  }
+
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .option-btn {
+    background: rgba(255,255,255,0.05);
+    border: 2px solid rgba(255,255,255,0.12);
+    border-radius: 14px;
+    padding: 14px 18px;
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .option-btn:hover:not(:disabled) {
+    background: rgba(255,62,127,0.15);
+    border-color: var(--pink);
+    transform: translateX(4px);
+  }
+
+  .option-btn .letter {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 900;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+  }
+
+  .option-btn.correct {
+    background: rgba(0,230,118,0.2);
+    border-color: var(--green);
+    animation: correctPulse 0.4s ease;
+  }
+
+  .option-btn.correct .letter { background: var(--green); color: #000; }
+
+  .option-btn.wrong {
+    background: rgba(255,23,68,0.2);
+    border-color: var(--red);
+  }
+
+  .option-btn.wrong .letter { background: var(--red); }
+
+  @keyframes correctPulse {
+    0%   { transform: scale(1); }
+    50%  { transform: scale(1.03); }
+    100% { transform: scale(1); }
+  }
+
+  /* Реакція на відповідь */
+  .reaction {
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 800;
+    margin-top: 14px;
+    min-height: 28px;
+    transition: all 0.3s;
+  }
+
+  .reaction.good { color: var(--green); }
+  .reaction.bad  { color: var(--red); }
+
+  /* ======= ЕКРАН РЕЗУЛЬТАТУ ======= */
+  #screen-result {
+    display: none;
+    text-align: center;
+    animation: popIn 0.7s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .result-cat {
+    font-size: 5rem;
+    display: block;
+    animation: spin 0.6s ease-out;
+    filter: drop-shadow(0 0 30px var(--yellow));
+  }
+
+  @keyframes spin {
+    from { transform: rotate(-180deg) scale(0); }
+    to   { transform: rotate(0deg) scale(1); }
+  }
+
+  .result-title {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--yellow);
+    text-shadow: 0 0 20px rgba(255,230,0,0.5);
+    margin: 16px 0 8px;
+    line-height: 1.3;
+  }
+
+  .result-score {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 22px;
+  }
+
+  .result-score b {
+    color: white;
+    font-size: 1.4rem;
+  }
+
+  .final-msg {
+    background: linear-gradient(135deg, rgba(255,62,127,0.2), rgba(255,230,0,0.1));
+    border: 2px solid var(--pink);
+    border-radius: 20px;
+    padding: 22px 24px;
+    color: white;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.6;
+    margin-bottom: 24px;
+    box-shadow: 0 0 30px rgba(255,62,127,0.3);
+  }
+
+  .final-msg .big {
+    font-family: 'Unbounded', sans-serif;
+    font-size: 1.3rem;
+    color: var(--pink);
+    display: block;
+    margin-bottom: 8px;
+  }
+
+  .confetti-row {
+    font-size: 2rem;
+    letter-spacing: 8px;
+    margin-bottom: 20px;
+    animation: wiggle 1s infinite alternate;
+  }
+
+  @keyframes wiggle {
+    from { transform: rotate(-3deg); }
+    to   { transform: rotate(3deg); }
+  }
+
+  .btn-restart {
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    background: transparent;
+    color: rgba(255,255,255,0.4);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50px;
+    padding: 10px 28px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-restart:hover {
+    color: white;
+    border-color: white;
+  }
+
+  /* Серця що летять при правильній відповіді */
+  .flying-heart {
+    position: fixed;
+    font-size: 1.8rem;
+    pointer-events: none;
+    z-index: 999;
+    animation: flyHeart 1s ease-out forwards;
+  }
+
+  @keyframes flyHeart {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-120px) scale(0.3); opacity: 0; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Фонові серця -->
+<div class="bg-hearts" id="bgHearts"></div>
+
+<div id="app">
+
+  <!-- СТАРТ -->
+  <div id="screen-start">
+    <span class="cat-emoji">😼</span>
+    <h1 class="title-main">Привіт, <span>Тоха!</span></h1>
+    <p class="subtitle">Твоя дівчина зробила для тебе особливу вікторину.<br>Подивимось, чи ти уважний 👀</p>
+    <div class="meme-box">
+      ⚠️ УВАГА: Результати цього тесту<br>безпосередньо впливають на кількість<br>котячих обіймів сьогодні 🐾
+    </div>
+    <button class="btn-start" onclick="startQuiz()">ПОЇХАЛИ 🚀</button>
+  </div>
+
+  <!-- ПИТАННЯ -->
+  <div id="screen-quiz">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="progressBar" style="width:0%"></div>
+    </div>
+    <div class="q-counter" id="qCounter">1 / 5</div>
+    <div class="question-card">
+      <span class="q-emoji" id="qEmoji">❓</span>
+      <p class="q-text" id="qText">Питання...</p>
+    </div>
+    <div class="options" id="optionsContainer"></div>
+    <div class="reaction" id="reaction"></div>
+  </div>
+
+  <!-- РЕЗУЛЬТАТ -->
+  <div id="screen-result">
+    <span class="result-cat" id="resultCat">🏆</span>
+    <h2 class="result-title" id="resultTitle">Заголовок</h2>
+    <p class="result-score" id="resultScore">Правильних відповідей: <b>5/5</b></p>
+    <div class="final-msg">
+      <span class="big">Ти найкращий котик в світі! 🐱</span>
+      Серйозно, перевірено науково, підтверджено дослідженнями. Ти — найкращий 💕
+    </div>
+    <div class="confetti-row">🎉🐾❤️🐾🎉</div>
+    <button class="btn-restart" onclick="restartQuiz()">Пройти ще раз (якщо не соромно 😅)</button>
+  </div>
+
+</div>
+
+<script>
+  // ============================================
+  // ДАНІ ВІКТОРИНИ
+  // В Python це був би список словників:
+  // questions = [ {"text": "...", "options": [...], "correct": 0} ]
+  // ============================================
+  const questions = [
+    {
+      emoji: "📅",
+      text: "Коли ми познайомились?",
+      options: ["11.12.2024", "11.12.2025", "21.12.2025", "01.12.2025"],
+      correct: 1,  // індекс правильної відповіді (рахунок з 0, як у Python)
+      goodReaction: "Правильно! Пам'ятаєш ❤️",
+      badReaction: "Ну Тоха... це ж наша дата 😤"
+    },
+    {
+      emoji: "🎨",
+      text: "Який мій улюблений колір?",
+      options: ["Синій", "Рожевий", "Червоний", "Фіолетовий"],
+      correct: 2,
+      goodReaction: "ТАК! Червоний як моя любов 🔴❤️",
+      badReaction: "ТОХА. СЕРЙОЗНО?? 😭"
+    },
+    {
+      emoji: "📱",
+      text: "Скільки разів на день я тобі пишу?",
+      options: ["Раз на день", "Кілька разів", "Часто", "Дохуя"],
+      correct: 3,
+      goodReaction: "Так, і не зупинюсь 😤💕",
+      badReaction: "І ти ще питаєш... ДОХУЯ! 😂"
+    },
+    {
+      emoji: "🐱",
+      text: "Як я тебе частіше називаю?",
+      options: ["Зайчик", "Сонечко", "Котик", "Масік"],
+      correct: 2,
+      goodReaction: "Бо ти МІЙ котик 🐾",
+      badReaction: "КОТИК! КОТЬ! Як ти міг забути 😹"
+    },
+    {
+      emoji: "💞",
+      text: "Як я тебе люблю?",
+      options: ["Трішки", "Багато", "Дуже багато", "Безмежно до нестями"],
+      correct: 3,
+      goodReaction: "Саме так! Безмежно 💗",
+      badReaction: "БЕЗМЕЖНО ДО НЕСТЯМИ, Тоха!! 😤💕"
+    }
+  ];
+
+  // ============================================
+  // ЗМІННІ СТАНУ ГРИ
+  // В Python: current_question = 0, score = 0
+  // ============================================
+  let currentQuestion = 0;
+  let score = 0;
+  let answered = false;  // щоб не можна було клікати двічі
+
+  // ============================================
+  // ГЕНЕРАЦІЯ ФОНОВИХ СЕРДЕЧОК
+  // ============================================
+  function createBgHearts() {
+    const container = document.getElementById('bgHearts');
+    const hearts = ['❤️','🧡','💛','💕','💗','🩷'];
+
+    // Цикл — як for i in range(15): у Python
+    for (let i = 0; i < 15; i++) {
+      const h = document.createElement('div');
+      h.className = 'bh';
+      h.textContent = hearts[Math.floor(Math.random() * hearts.length)];
+      // Math.random() — як random.random() у Python
+      h.style.left = Math.random() * 100 + '%';
+      h.style.animationDuration = (4 + Math.random() * 8) + 's';
+      h.style.animationDelay = (Math.random() * 8) + 's';
+      h.style.fontSize = (1 + Math.random() * 2) + 'rem';
+      container.appendChild(h);
+    }
+  }
+
+  // ============================================
+  // СТАРТ ВІКТОРИНИ
+  // ============================================
+  function startQuiz() {
+    // Ховаємо стартовий екран, показуємо питання
+    document.getElementById('screen-start').style.display = 'none';
+    document.getElementById('screen-quiz').style.display = 'block';
+    showQuestion();
+  }
+
+  // ============================================
+  // ПОКАЗАТИ ПИТАННЯ
+  // ============================================
+  function showQuestion() {
+    answered = false;
+    const q = questions[currentQuestion];  // як questions[i] у Python
+
+    // Оновлюємо текст — як у Python: element.text = "..."
+    document.getElementById('qEmoji').textContent = q.emoji;
+    document.getElementById('qText').textContent = q.text;
+    document.getElementById('reaction').textContent = '';
+    document.getElementById('reaction').className = 'reaction';
+
+    // Прогрес бар
+    const progress = (currentQuestion / questions.length) * 100;
+    document.getElementById('progressBar').style.width = progress + '%';
+    document.getElementById('qCounter').textContent = (currentQuestion + 1) + ' / ' + questions.length;
+
+    // Генерація кнопок відповідей
+    const container = document.getElementById('optionsContainer');
+    container.innerHTML = '';  // очищаємо старі кнопки
+
+    const letters = ['А', 'Б', 'В', 'Г'];
+
+    // Перебираємо варіанти — як for i, opt in enumerate(options): у Python
+    q.options.forEach(function(option, index) {
+      const btn = document.createElement('button');
+      btn.className = 'option-btn';
+      btn.innerHTML = '<span class="letter">' + letters[index] + '</span>' + option;
+
+      // Додаємо обробник кліку — як callback у Python
+      btn.onclick = function() { checkAnswer(index, btn); };
+      container.appendChild(btn);
+    });
+  }
+
+  // ============================================
+  // ПЕРЕВІРКА ВІДПОВІДІ
+  // ============================================
+  function checkAnswer(selectedIndex, clickedBtn) {
+    if (answered) return;  // якщо вже відповіли — ігноруємо
+    answered = true;
+
+    const q = questions[currentQuestion];
+    const allBtns = document.querySelectorAll('.option-btn');
+
+    // Відключаємо всі кнопки
+    allBtns.forEach(function(b) { b.disabled = true; });
+
+    const reactionEl = document.getElementById('reaction');
+
+    if (selectedIndex === q.correct) {
+      // ПРАВИЛЬНО!
+      clickedBtn.classList.add('correct');
+      score++;  // score += 1 у Python
+      reactionEl.textContent = q.goodReaction;
+      reactionEl.className = 'reaction good';
+      spawnHearts(clickedBtn);
+    } else {
+      // НЕПРАВИЛЬНО
+      clickedBtn.classList.add('wrong');
+      allBtns[q.correct].classList.add('correct');  // підсвічуємо правильну
+      reactionEl.textContent = q.badReaction;
+      reactionEl.className = 'reaction bad';
+    }
+
+    // Через 1.8 секунди переходимо до наступного питання
+    // setTimeout — як time.sleep() але не блокує сторінку
+    setTimeout(function() {
+      currentQuestion++;
+
+      if (currentQuestion < questions.length) {
+        showQuestion();
+      } else {
+        showResult();
+      }
+    }, 1800);
+  }
+
+  // ============================================
+  // ЛІТАЮЧІ СЕРЦЯ ПРИ ПРАВИЛЬНІЙ ВІДПОВІДІ
+  // ============================================
+  function spawnHearts(btn) {
+    const rect = btn.getBoundingClientRect();
+
+    for (let i = 0; i < 5; i++) {
+      const heart = document.createElement('div');
+      heart.className = 'flying-heart';
+      heart.textContent = ['❤️','💕','💗','🩷'][Math.floor(Math.random() * 4)];
+      heart.style.left = (rect.left + Math.random() * rect.width) + 'px';
+      heart.style.top = rect.top + 'px';
+      heart.style.animationDelay = (i * 0.1) + 's';
+      document.body.appendChild(heart);
+
+      // Видаляємо після анімації
+      setTimeout(function() { heart.remove(); }, 1200);
+    }
+  }
+
+  // ============================================
+  // ПОКАЗАТИ РЕЗУЛЬТАТ
+  // ============================================
+  function showResult() {
+    document.getElementById('screen-quiz').style.display = 'none';
+    document.getElementById('screen-result').style.display = 'block';
+
+    document.getElementById('resultScore').innerHTML =
+      'Правильних відповідей: <b>' + score + '/' + questions.length + '</b>';
+
+    // Різні реакції залежно від рахунку
+    // Як if/elif/else у Python
+    let cat, title;
+    if (score === 5) {
+      cat = '🏆';
+      title = 'Ідеальний котик!\nТи уважний!';
+    } else if (score >= 3) {
+      cat = '😸';
+      title = 'Непогано, котику!\nАле є куди рости 😄';
+    } else {
+      cat = '🙈';
+      title = 'Тоха... ми поговоримо 😂';
+    }
+
+    document.getElementById('resultCat').textContent = cat;
+    document.getElementById('resultTitle').textContent = title;
+  }
+
+  // ============================================
+  // ПЕРЕЗАПУСК
+  // ============================================
+  function restartQuiz() {
+    currentQuestion = 0;
+    score = 0;
+    answered = false;
+
+    document.getElementById('screen-result').style.display = 'none';
+    document.getElementById('screen-quiz').style.display = 'block';
+    showQuestion();
+  }
+
+  // ============================================
+  // ЗАПУСК ПРИ ЗАВАНТАЖЕННІ СТОРІНКИ
+  // Як if __name__ == "__main__": у Python
+  // ============================================
+  createBgHearts();
+</script>
+</body>
+</html>
